@@ -1,0 +1,81 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row mt-3">
+    <div class="console-output form-control bg-dark text-light" style="height: 600px; overflow-y: scroll;">
+    </div>
+</div>
+
+<div class="row mt-3 ">
+    <form method="post" id="promptForm" action="/prompt/run">
+        <div class="input-group">
+            <input class="form-control prompt-input bg-dark text-light shadow-none" placeholder="type a command or --help." role="group" />
+            <button class="btn btn-primary" type="submit" role="group">Send</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        var input = $('.prompt-input');
+        var consoleOutput = $('.console-output');
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/consolehub").build();
+
+        connection.on("WriteLine", function (message) {
+            setOutput(message);
+        });
+
+        connection.on("Exit", function (url) {
+            setOutput('good bye! :rocket:');
+
+            setTimeout(function(){
+                window.location.href = url;
+            }, 1000);
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        function setOutput(message) {
+            consoleOutput.append(marked.parse(message));
+
+            consoleOutput.scrollTop(consoleOutput[0].scrollHeight);
+        }
+
+        $(document).ready(function(){
+            input.focus();
+
+            marked.setOptions({
+                breaks: true
+            });
+
+            $("#promptForm").submit(function (e) {
+                e.preventDefault();
+
+                if(input.val() === '') {
+                    setOutput('*No argumnets provided.*');
+                    
+                    return;
+                }
+
+                connection.invoke("PostCommand", input.val()).catch(function (err) {
+                    setOutput(err.toString());
+
+                    return false;
+                });
+
+                input.val('');
+                input.focus();
+            });
+        });
+    </script>
+}
