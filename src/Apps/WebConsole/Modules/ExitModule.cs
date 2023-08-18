@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommandPrompt.Web.Exceptions;
 using Fjv.Modules;
 using Fjv.Modules.Attributes;
+using WebConsole.Extensions;
 
 namespace CommandPrompt.Web.Modules
 {
@@ -12,9 +13,9 @@ namespace CommandPrompt.Web.Modules
     [ModuleHelp("Exit the console.")]
     public class ExitModule : IDefaultModuleAsync
     {
-        public Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
+        public async Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
         {
-            return Task.FromResult<byte[]>(new byte[0]);
+            return await Bytes.EmptyAsync();
         }
     }
 }

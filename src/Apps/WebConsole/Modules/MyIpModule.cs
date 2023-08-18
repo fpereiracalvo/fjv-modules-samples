@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Fjv.Modules;
 using Fjv.Modules.Attributes;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using WebConsole.Extensions;
 
 namespace WebConsole.Modules
 {
@@ -21,13 +22,11 @@ namespace WebConsole.Modules
 
         public async Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
         {
-            await Task.Run(()=>{
-                var ip = _actionContextAccessor.ActionContext?.HttpContext.Connection.RemoteIpAddress.ToString() ?? throw new Exception("No IP address found.");
+            var ip = _actionContextAccessor.ActionContext?.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? throw new Exception("No IP address found.");
 
-                Console.WriteLine($"> IP: {ip}\n");
-            });
+            Console.WriteLine($"> IP: {ip}\n");
 
-            return new byte[]{};
+            return await Bytes.EmptyAsync();
         }
     }
 }

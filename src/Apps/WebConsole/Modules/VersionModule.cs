@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Fjv.Modules;
 using Fjv.Modules.Attributes;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using WebConsole.Extensions;
 
 namespace CommandPrompt.Web.Modules
 {
@@ -15,11 +16,9 @@ namespace CommandPrompt.Web.Modules
     {
         public async Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
         {
-            await Task.Run(()=>{
-                Console.WriteLine("**Fjv WebConsole v1.0.0-demo.1**\n");
-            });
+            Console.WriteLine("**Fjv WebConsole v1.0.0-demo.1**\n");
 
-            return new byte[]{};
+            return await Bytes.EmptyAsync();
         }
     }
 }

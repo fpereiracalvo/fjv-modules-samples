@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fjv.Modules;
 using Fjv.Modules.Attributes;
+using WebConsole.Extensions;
 
 namespace WebConsole.Modules
 {
@@ -20,23 +21,21 @@ namespace WebConsole.Modules
 
         public async Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
         {
-            await Task.Run(()=>{
-                var _args_ = args.Where(s=>!s.Equals("--help")).ToArray();
-                var message = string.Empty;
+            var _args_ = args.Where(s=>!s.Equals("--help")).ToArray();
+            var message = string.Empty;
 
-                if(_args_.Any())
-                {
-                    message = _moduleFactory.GetHelp(_args_);
-                }
-                else
-                {
-                    message = _moduleFactory.GetHelp();
-                }
+            if(_args_.Any())
+            {
+                message = _moduleFactory.GetHelp(_args_);
+            }
+            else
+            {
+                message = _moduleFactory.GetHelp();
+            }
 
-                Console.WriteLine($"```bash\n{message}\n```");
-            });
+            Console.WriteLine($"```bash\n{message}\n```");
 
-            return new byte[]{};
+            return await Bytes.EmptyAsync();
         }
     }
 }

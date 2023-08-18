@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fjv.Modules;
 using Fjv.Modules.Attributes;
+using WebConsole.Extensions;
 
 namespace WebConsole.Modules
 {
@@ -13,7 +14,7 @@ namespace WebConsole.Modules
     {
         public async Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
         {
-            return new byte[]{};
+            return await Bytes.EmptyAsync();
         }
 
         [Option("--times", true)]
@@ -27,7 +28,7 @@ namespace WebConsole.Modules
                 await Task.Delay(delay);
             }
 
-            return new byte[]{};
+            return await Bytes.EmptyAsync();
         }
 
         [Option("--help")]
@@ -35,7 +36,8 @@ namespace WebConsole.Modules
         public async Task<byte[]> Help()
         {
             Console.WriteLine("Example: > time --times 5 1000");
-            return new byte[]{};
+            
+            return await Bytes.EmptyAsync();
         }
     }
 }

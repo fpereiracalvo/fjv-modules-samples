@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fjv.Modules;
 using Fjv.Modules.Attributes;
+using WebConsole.Extensions;
 using WebConsole.Modules;
 
 namespace CommandPrompt.Web.Modules
@@ -15,11 +16,9 @@ namespace CommandPrompt.Web.Modules
     {
         public async Task<byte[]> LoadAsync(byte[] input, string[] args, int index)
         {
-            await Task.Run(()=>{
-                Console.WriteLine(File.ReadAllText(HelpCommons.GetPath("about.md")));
-            });
+            Console.WriteLine(File.ReadAllText(HelpCommons.GetPath("about.md")));
 
-            return new byte[]{};
+            return await Bytes.EmptyAsync();
         }
     }
 }
